@@ -136,7 +136,7 @@ const App = () => {
       >
         {/* Grid cells */}
         {grid.map((rows, i) =>
-          rows.map((j) => (
+          rows.map((_col, j) => (
             <div
               key={`${i}-${j}`}
               onClick={() => {
