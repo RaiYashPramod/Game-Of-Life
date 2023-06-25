@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import { produce, Draft } from "immer";
+import { useState, useRef } from "react";
+import { produce } from "immer";
 import "./App.css";
 
 const numRows = 50;
@@ -136,7 +136,7 @@ const App = () => {
       >
         {/* Grid cells */}
         {grid.map((rows, i) =>
-          rows.map((col, j) => (
+          rows.map((j) => (
             <div
               key={`${i}-${j}`}
               onClick={() => {
