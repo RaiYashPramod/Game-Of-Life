@@ -5,7 +5,6 @@ import "./App.css";
 const numRows = 50;
 const numCols = 50;
 
-// Define the possible neighbor positions
 const operations = [
   [0, 1],
   [1, 0],
@@ -17,7 +16,6 @@ const operations = [
   [-1, 1],
 ];
 
-// Function to generate an empty grid
 const generateEmptyGrid = () => {
   const rows = [];
 
@@ -29,18 +27,15 @@ const generateEmptyGrid = () => {
 };
 
 const App = () => {
-  // State variables
   const [grid, setGrid] = useState(() => {
     return generateEmptyGrid();
   });
 
   const [running, setRunning] = useState(false);
 
-  // Ref to store the running state
   const runningRef = useRef(running);
   runningRef.current = running;
 
-  // Function to run the simulation
   const runSimulation = () => {
     if (!runningRef.current) {
       return;
@@ -51,7 +46,6 @@ const App = () => {
         for (let i = 0; i < numRows; i++) {
           for (let j = 0; j < numCols; j++) {
             let neighbours = 0;
-            // Count the number of alive neighbors
             operations.forEach(([x, y]) => {
               const newI = x + i;
               const newJ = y + j;
@@ -60,7 +54,6 @@ const App = () => {
               }
             });
 
-            // Apply the rules of the Game of Life to update the grid
             if (neighbours < 2 || neighbours > 3) {
               gridCopy[i][j] = 0;
             } else if (g[i][j] === 0 && neighbours === 3) {
@@ -75,16 +68,8 @@ const App = () => {
   };
 
   return (
-    <>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          margin: "1rem",
-        }}
-      >
-        {/* Start/Stop button */}
+    <div className="container">
+      <div className="controls">
         <button
           onClick={() => {
             setRunning(!running);
@@ -93,17 +78,15 @@ const App = () => {
               runSimulation();
             }
           }}
-          style={{ padding: "1rem", marginRight: "1rem" }}
+          className={`control-button ${running ? "active" : ""}`}
         >
           {running ? "Stop" : "Start"}
         </button>
-        {/* Randomize button */}
         <button
           onClick={() => {
-            const newGrid = produce(grid, (gridCopy: number[][]) => {
+            const newGrid = produce(grid, (gridCopy) => {
               for (let i = 0; i < numRows; i++) {
                 for (let j = 0; j < numCols; j++) {
-                  // Set cells randomly to be alive with a 25% chance
                   gridCopy[i][j] = Math.random() > 0.75 ? 1 : 0;
                 }
               }
@@ -111,53 +94,38 @@ const App = () => {
 
             setGrid(newGrid);
           }}
-          style={{ padding: "1rem", marginRight: "1rem" }}
+          className="control-button"
         >
           Random
         </button>
-        {/* Reset button */}
         <button
           onClick={() => {
             setGrid(generateEmptyGrid());
             setRunning(!running);
           }}
-          style={{ padding: "1rem" }}
+          className="control-button"
         >
           Reset
         </button>
       </div>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: `repeat(${numCols}, 20px)`,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        {/* Grid cells */}
+      <div className="grid">
         {grid.map((rows, i) =>
           rows.map((_col, j) => (
             <div
               key={`${i}-${j}`}
               onClick={() => {
-                const newGrid = produce(grid, (gridCopy: number[][]) => {
+                const newGrid = produce(grid, (gridCopy) => {
                   gridCopy[i][j] = grid[i][j] ? 0 : 1;
                 });
 
                 setGrid(newGrid);
               }}
-              style={{
-                height: 20,
-                width: 20,
-                border: "solid 1px grey",
-                backgroundColor: grid[i][j] ? "white" : "",
-              }}
+              className={`cell ${grid[i][j] ? "alive" : ""}`}
             ></div>
           ))
         )}
       </div>
-      {/* Link to learn more */}
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <div className="learn-more">
         <a
           href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life"
           target="_blank"
@@ -166,7 +134,7 @@ const App = () => {
           Learn more
         </a>
       </div>
-    </>
+    </div>
   );
 };
 
