@@ -50,8 +50,8 @@
   margin-top: 1rem;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
   .grid {
-    grid-template-columns: repeat(10, 20px);
+    grid-template-columns: repeat(14, 20px);
   }
 }
